@@ -9,8 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.util.Random;
-class Simongame {
+
+// import java.util.Arrays;
+import java.util.ArrayList;
+public class Simongame {
 
     JFrame frame; // window frame
     JButton btnPlay; // play button
@@ -20,6 +22,7 @@ class Simongame {
     JButton lPad, rPad, upPad, downPad; // leftpad rightpad uppad downpad
     Icon left, right, up, down;
     int countgen = 1; // count for generate pattern (level will increase from countgen)
+    ArrayList <Integer> pattern = new ArrayList<Integer>(4);
     
     Simongame(){
         frame = new JFrame();
@@ -49,37 +52,47 @@ class Simongame {
         frame.add(btnQuit);
     }
     void inGamePhase(){
-        try {
-            left = new ImageIcon();
-            right = new ImageIcon();
-            up = new ImageIcon();
-            down = new ImageIcon();
-        } catch (Exception e) {
-            // TODO: handle exception
-            System.err.println(e);
-        }
+        // add image
+        // try {
+        //     left = new ImageIcon();
+        //     right = new ImageIcon();
+        //     up = new ImageIcon();
+        //     down = new ImageIcon();
+        // } catch (Exception e) {
+        //     // TODO: handle exception
+        //     System.err.println(e);
+        // }
+        // set icon
         lPad.setIcon(left);
         rPad.setIcon(right);
         upPad.setIcon(up);
         downPad.setIcon(down);
-
+        // action listener
         SimonActionListener action = new SimonActionListener();
+        lPad.addActionListener(action);
+        rPad.addActionListener(action);
+        upPad.addActionListener(action);
+        downPad.addActionListener(action);
+        // pattern = genPattern();
+        System.out.println(pattern);
 
     }
-    void genPattern(){
-        Random rand = new Random();
-        int arr [] = new int[4];
-        if (countgen < 4){
-            int a = rand.nextInt(4);
-            
+    public ArrayList<Integer> genPattern(){
+        int count = 0;
+        // int[] arr = new int[4]; 
+        for (int i = 0; i < pattern.size(); i++){
+            pattern.add(i + Math.random() > 0.49 ? 1 : 0);
+            // arr[i] += Math.random() > 0.49 ? 1 : 0;
+            count += pattern.get(i);
+            if (count >= countgen){
+                break;
+            }
+            if (count != countgen && i == pattern.size() - 1){
+                i = 0;
+                count = 0;
+            }
         }
-        for (int i = 0; i < arr.length; i++){
-            // random amount tick in one pad 
-            // random 4 pad pattern
-            arr[i] = Math.random() > 0.49 ? 1 : 0;
-            
-            
-        }
+        return pattern;
     }
     // public static void main(String[] args) {
     //     Simongame game = new Simongame();
