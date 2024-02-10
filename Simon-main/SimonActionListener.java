@@ -6,12 +6,12 @@ import javax.swing.JButton;
 /**
  * SimonActionListener
  */
-public class SimonActionListener implements ActionListener{
+public class SimonActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton input = (JButton)e.getSource();
-        // if (input )
+        
         // TODO Auto-generated method stub
         // throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
