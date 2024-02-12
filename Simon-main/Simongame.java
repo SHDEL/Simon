@@ -23,16 +23,16 @@ public class Simongame {
     JButton lPad, rPad, upPad, downPad; // leftpad rightpad uppad downpad
     Icon left, right, up, down;
     PadType type; // enum Padtype
-    ArrayList <PadType> list_pad = new ArrayList<>();
+    ArrayList <PadType> list_pad = new ArrayList<>(); // list of Padtype 
     ArrayList <Integer> list_amount = new ArrayList<>(); // list of amount to click in one pad
-    LinkedHashMap<PadType,Integer> pattern = new LinkedHashMap<>();
-    int countgen = 5; // count for generate pattern (level will increase from countgen)
+    int countgen = 1; // count for generate pattern (level will increase from countgen)
+    int cntrandom = countgen;
 
     boolean hasClick = false;
     
     Simongame(){
         frame = new JFrame();
-        frame.setSize(450, 400);
+        frame.setSize(500, 400);
         frame.setVisible(true);
         frame.setLayout(new FlowLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,7 +56,6 @@ public class Simongame {
 
         frame.add(btnPlay);
         frame.add(btnQuit);
-
         // add image
         // try {
         //     left = new ImageIcon();
@@ -76,6 +75,13 @@ public class Simongame {
         inGamePhase();
     }
     void inGamePhase(){
+        // list_pad add Padtype
+        list_pad.add(PadType.RED);
+        list_pad.add(PadType.CYAN);
+        list_pad.add(PadType.LIGHT_GREEN);
+        list_pad.add(PadType.ORANGE);
+        list_pad.add(PadType.YELLOW);
+        list_pad.add(PadType.PURPLE);
         // action listener
         SimonActionListener action = new SimonActionListener();
         lPad.addActionListener(action);
@@ -83,6 +89,18 @@ public class Simongame {
         upPad.addActionListener(action);
         downPad.addActionListener(action);
         // genPattern();
+        genpattern2();
+        countgen ++;
+        genpattern2();
+        countgen ++;
+        genpattern2();
+        countgen ++;
+        genpattern2();
+        countgen ++;
+        genpattern2();
+        countgen ++;
+        genpattern2();
+        countgen ++;
         genpattern2();
 
     }
@@ -123,32 +141,59 @@ public class Simongame {
 
     // }
     private void genpattern2(){
-        // list_pad add Padtype
-        list_pad.add(PadType.LEFT);
-        list_pad.add(PadType.RIGHT);
-        list_pad.add(PadType.UP);
-        list_pad.add(PadType.DOWN);
+        
         // list_amount add amount
-        list_amount.add(1);
-        list_amount.add(2);
-        list_amount.add(3);
-        list_amount.add(4);
-        // add Padtype and amount to LinkedHashmap 
-        for (int i = 0; i < 4; i++){
-            pattern.put(randomPadtype(list_pad), randomAmount(list_amount));
-            System.out.println("Map: " + pattern);
+        int cnt = countgen;
+        LinkedHashMap<PadType,Integer> pattern = new LinkedHashMap<>();
+        System.out.println("----------Round: " + countgen + "---------");
+        if (cnt <= 2){
+            for (int i = 1; i <= cnt; i++){
+                list_amount.add(i);
+            }
+            for (int i = 1; i <= cnt; i++){
+                pattern.put(randomPadtype(list_pad), randomAmount(list_amount));
+                // error when list_pad is null
+                
+            }
         }
+        else{
+            for (int i = 1; i <= cnt; i++){
+                list_amount.add(i);
+                cnt --;
+            }
+            for (int i = 0; i <= cnt; i++){
+                pattern.put(randomPadtype(list_pad), randomAmount(list_amount));
+                // error when list_pad is null
+                // cnt --;
+            }
+        }
+        // add Padtype and amount to LinkedHashmap 
+        
+        System.out.println("Map: " + pattern);
+        list_amount.clear();
+        // cntrandom = countgen;
         
     }
     private PadType randomPadtype(ArrayList<PadType> list){
         Random rand = new Random();
-        PadType type = list.get(rand.nextInt(list.size()));
-        System.out.println("Listpad after random: " + list);
+        int i = rand.nextInt(list.size());
+        PadType type = list.get(i);
+        // if (countgen >= 6){
+        //     list.remove(0);
+        // }
+        // list.remove(i);
+        // System.out.println("Listpad after random: " + list);
         return type;
     }
     private Integer randomAmount(ArrayList<Integer> list){
         Random rand = new Random();
-        Integer n = list.get(rand.nextInt(list.size()));
+        System.out.println( "Listamount before random: "+ list);
+        int i = rand.nextInt(list.size());
+        Integer n = list.get(i);
+        // cntrandom -= n;
+        if (n == 1 && countgen >= 6){
+            list.remove(i);
+        }
         System.out.println( "Listamount after random: "+ list);
         return n;
     }
